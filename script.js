@@ -20,11 +20,27 @@ function setupNavigation() {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const sectionId = this.getAttribute('href').substring(1);
+
+            if (sectionId === 'home') {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                return;
+            }
+
             showSection(sectionId);
 
-            document.getElementById(sectionId).scrollIntoView({
-                behavior: 'smooth'
-            });
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const headerHeight = 160;
+                const sectionTop = section.offsetTop - headerHeight;
+
+                window.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+            }
         });
     });
 }
