@@ -21,8 +21,38 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+
+            <!-- Cart Icon -->
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
         </nav>
     </header>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Your Order</h2>
+                <button class="close-cart" onclick="toggleCart()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>Total: $<span id="cartTotal">0.00</span></strong>
+                </div>
+                <div class="cart-actions">
+                    <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+                    <button class="checkout-btn" onclick="checkout()">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="carousel-container">
         <div class="carousel-slides" id="carouselSlides">
@@ -125,21 +155,36 @@
                             <h4>Gravlaks</h4>
                             <p>Traditional cured salmon with dill and mustard sauce</p>
                         </div>
-                        <div class="menu-item-price">$18</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$18</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Gravlaks', 18, 'Traditional cured salmon with dill and mustard sauce')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Reindeer Carpaccio</h4>
                             <p>Thinly sliced reindeer with juniper berries and lingonberry</p>
                         </div>
-                        <div class="menu-item-price">$22</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$22</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Reindeer Carpaccio', 22, 'Thinly sliced reindeer with juniper berries and lingonberry')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Norwegian Shrimp Salad</h4>
                             <p>Fresh cold-water shrimp with traditional seasonings</p>
                         </div>
-                        <div class="menu-item-price">$16</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$16</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Norwegian Shrimp Salad', 16, 'Fresh cold-water shrimp with traditional seasonings')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -150,21 +195,36 @@
                             <h4>Arctic Char</h4>
                             <p>Pan-seared with roasted root vegetables and cloudberry sauce</p>
                         </div>
-                        <div class="menu-item-price">$32</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$32</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Arctic Char', 32, 'Pan-seared with roasted root vegetables and cloudberry sauce')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Reindeer Medallions</h4>
                             <p>Our signature dish with wild mushrooms and juniper jus</p>
                         </div>
-                        <div class="menu-item-price">$38</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$38</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Reindeer Medallions', 38, 'Our signature dish with wild mushrooms and juniper jus')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Lamb Fårikål</h4>
                             <p>Traditional Norwegian lamb and cabbage stew</p>
                         </div>
-                        <div class="menu-item-price">$28</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$28</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Lamb Fårikål', 28, 'Traditional Norwegian lamb and cabbage stew')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -175,21 +235,36 @@
                             <h4>Krumkake Ice Cream</h4>
                             <p>Vanilla ice cream with traditional Norwegian waffle cone</p>
                         </div>
-                        <div class="menu-item-price">$12</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$12</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Krumkake Ice Cream', 12, 'Vanilla ice cream with traditional Norwegian waffle cone')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Cloudberry Parfait</h4>
                             <p>Light parfait with Arctic cloudberries and almond crisp</p>
                         </div>
-                        <div class="menu-item-price">$14</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$14</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Cloudberry Parfait', 14, 'Light parfait with Arctic cloudberries and almond crisp')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                     <div class="menu-item">
                         <div class="menu-item-info">
                             <h4>Lefse Cake</h4>
                             <p>Traditional layered cake with lingonberry cream</p>
                         </div>
-                        <div class="menu-item-price">$11</div>
+                        <div class="menu-item-actions">
+                            <div class="menu-item-price">$11</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('Lefse Cake', 11, 'Traditional layered cake with lingonberry cream')">
+                                <i class="fas fa-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

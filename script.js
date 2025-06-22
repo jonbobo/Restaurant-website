@@ -4,6 +4,9 @@ const slideContainer = document.getElementById('carouselSlides');
 const indicators = document.querySelectorAll('.carousel-indicator');
 let autoSlideInterval;
 
+let cart = [];
+let cartTotal = 0;
+
 function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
@@ -87,11 +90,148 @@ function handleFormSubmit(event) {
     event.target.reset();
 }
 
+function addToCart(name, price, description) {
+    const existingItem = cart.find(item => item.name === name);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            name: name,
+            price: price,
+            description: description,
+            quantity: 1
+        });
+    }
+    
+    updateCartDisplay();
+    showCartNotification(name);
+}
+
+function removeFromCart(name) {
+    cart = cart.filter(item => item.name !== name);
+    updateCartDisplay();
+}
+
+function updateQuantity(name, newQuantity) {
+    if (newQuantity <= 0) {
+        removeFromCart(name);
+        return;
+    }
+    
+    const item = cart.find(item => item.name === name);
+    if (item) {
+        item.quantity = newQuantity;
+    }
+    
+    updateCartDisplay();
+}
+
+function updateCartDisplay() {
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotalElement = document.getElementById('cartTotal');
+    
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    
+    cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotalElement.textContent = cartTotal.toFixed(2);
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+    } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>${item.description}</p>
+                    <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+                </div>
+                <div class="cart-item-controls">
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})" class="quantity-btn">-</button>
+                        <span class="quantity">${item.quantity}</span>
+                        <button onclick="updateQuantity('${item.name}', ${item.quantity + 1})" class="quantity-btn">+</button>
+                    </div>
+                    <div class="item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+                    <button onclick="removeFromCart('${item.name}')" class="remove-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+function toggleCart() {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.toggle('active');
+    
+    if (cartModal.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = '';
+    }
+}
+
+function clearCart() {
+    if (cart.length === 0) {
+        alert('Your cart is already empty!');
+        return;
+    }
+    
+    if (confirm('Are you sure you want to clear your cart?')) {
+        cart = [];
+        updateCartDisplay();
+    }
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+    
+    let orderSummary = 'Order Summary:\n\n';
+    cart.forEach(item => {
+        orderSummary += `${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+    });
+    orderSummary += `\nTotal: $${cartTotal.toFixed(2)}`;
+    orderSummary += '\n\nThank you for your order! We will contact you soon to confirm your reservation and order details.';
+    
+    alert(orderSummary);
+    
+    cart = [];
+    updateCartDisplay();
+    toggleCart();
+}
+
+function showCartNotification(itemName) {
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification';
+    notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${itemName} added to cart!</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 2000);
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     showSection('home');
-
     setupNavigation();
-
     updateCarousel();
     startAutoSlide();
 
@@ -109,6 +249,11 @@ document.addEventListener('DOMContentLoaded', function () {
             previousSlide();
         } else if (e.key === 'ArrowRight') {
             nextSlide();
+        } else if (e.key === 'Escape') {
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal.classList.contains('active')) {
+                toggleCart();
+            }
         }
     });
 
@@ -116,4 +261,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (contactForm) {
         contactForm.addEventListener('submit', handleFormSubmit);
     }
+
+    updateCartDisplay();
+
+    document.getElementById('cartModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            toggleCart();
+        }
+    });
 });
