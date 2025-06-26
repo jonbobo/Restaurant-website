@@ -206,23 +206,21 @@ const App = () => {
 
   // Components
   const MenuItem = ({ item }) => (
-    <div className="flex justify-between items-start mb-6 p-4 rounded-lg transition-all duration-300 hover:bg-orange-50">
-      <div className="flex-1 mr-4">
+    <div className="flex flex-col justify-between h-full mb-6 p-4 rounded-lg transition-all duration-300 hover:bg-orange-50">
+      <div className="flex-1 mb-4">
         <h4 className="text-gray-800 mb-2 text-xl font-semibold">{item.name}</h4>
         <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+        <div className="text-orange-500 font-bold text-xl mt-3">${item.price}</div>
       </div>
-      <div className="flex flex-col items-end gap-2">
-        <div className="text-orange-500 font-bold text-xl mb-2">${item.price}</div>
-        <button
-          className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm transition-all duration-300 hover:bg-orange-600 hover:-translate-y-0.5 hover:shadow-lg flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-          onClick={() => addToCart(item.name, item.price, item.description)}
-        >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Add to Cart
-        </button>
-      </div>
+      <button
+        className="w-full bg-orange-500 text-white px-4 py-3 rounded-full text-sm transition-all duration-300 hover:bg-orange-600 hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-orange-500 font-medium"
+        onClick={() => addToCart(item.name, item.price, item.description)}
+      >
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
+        </svg>
+        Add to Cart
+      </button>
     </div>
   );
 
@@ -278,34 +276,69 @@ const App = () => {
             <li><button type="button" onClick={() => navigateToSection('contact')} className="text-black hover:text-yellow-600 transition-colors duration-300 font-medium cursor-pointer bg-transparent border-none text-2xl font-serif p-0">Contact</button></li>
           </ul>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden flex flex-col gap-1 cursor-pointer"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <span className="w-6 h-0.5 bg-gray-800 transition-all duration-300"></span>
-            <span className="w-6 h-0.5 bg-gray-800 transition-all duration-300"></span>
-            <span className="w-6 h-0.5 bg-gray-800 transition-all duration-300"></span>
-          </button>
+          <div className="flex items-center gap-4">
+            {/* Cart Icon */}
+            <div className="relative cursor-pointer p-2 text-orange-500 text-2xl transition-colors duration-300 hover:text-orange-600" onClick={toggleCart}>
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+              </svg>
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold min-w-5">
+                {getTotalItems()}
+              </span>
+            </div>
 
-          <div className="relative cursor-pointer p-2 text-orange-500 text-2xl transition-colors duration-300 hover:text-orange-600" onClick={toggleCart}>
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-            </svg>
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold min-w-5">
-              {getTotalItems()}
-            </span>
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden flex flex-col gap-1 cursor-pointer p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <span className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+              <span className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
+              <span className={`w-6 h-0.5 bg-gray-800 transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+            </button>
           </div>
         </nav>
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg">
+          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-t border-gray-200">
             <ul className="flex flex-col">
-              <li><button type="button" onClick={() => navigateToSection('home')} className="w-full text-left px-4 py-4 text-black hover:text-yellow-600 transition-colors duration-300 font-medium border-b border-gray-200 bg-transparent border-none text-xl font-serif">Home</button></li>
-              <li><button type="button" onClick={() => navigateToSection('menu')} className="w-full text-left px-4 py-4 text-black hover:text-yellow-600 transition-colors duration-300 font-medium border-b border-gray-200 bg-transparent border-none text-xl font-serif">Menu</button></li>
-              <li><button type="button" onClick={() => navigateToSection('about')} className="w-full text-left px-4 py-4 text-black hover:text-yellow-600 transition-colors duration-300 font-medium border-b border-gray-200 bg-transparent border-none text-xl font-serif">About</button></li>
-              <li><button type="button" onClick={() => navigateToSection('contact')} className="w-full text-left px-4 py-4 text-black hover:text-yellow-600 transition-colors duration-300 font-medium bg-transparent border-none text-xl font-serif">Contact</button></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('home')}
+                  className="w-full text-left px-6 py-4 text-black hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 font-medium border-b border-gray-100 bg-transparent border-none text-lg font-serif"
+                >
+                  Home
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('menu')}
+                  className="w-full text-left px-6 py-4 text-black hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 font-medium border-b border-gray-100 bg-transparent border-none text-lg font-serif"
+                >
+                  Menu
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('about')}
+                  className="w-full text-left px-6 py-4 text-black hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 font-medium border-b border-gray-100 bg-transparent border-none text-lg font-serif"
+                >
+                  About
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigateToSection('contact')}
+                  className="w-full text-left px-6 py-4 text-black hover:text-orange-500 hover:bg-orange-50 transition-all duration-300 font-medium bg-transparent border-none text-lg font-serif"
+                >
+                  Contact
+                </button>
+              </li>
             </ul>
           </div>
         )}
@@ -432,9 +465,11 @@ const App = () => {
                 Appetizers
                 <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-12 h-1 bg-orange-500 rounded"></div>
               </h3>
-              {menuData.appetizers.map((item, index) => (
-                <MenuItem key={index} item={item} />
-              ))}
+              <div className="flex flex-col gap-4">
+                {menuData.appetizers.map((item, index) => (
+                  <MenuItem key={index} item={item} />
+                ))}
+              </div>
             </div>
 
             <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
@@ -442,9 +477,11 @@ const App = () => {
                 Main Courses
                 <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-12 h-1 bg-orange-500 rounded"></div>
               </h3>
-              {menuData.mains.map((item, index) => (
-                <MenuItem key={index} item={item} />
-              ))}
+              <div className="flex flex-col gap-4">
+                {menuData.mains.map((item, index) => (
+                  <MenuItem key={index} item={item} />
+                ))}
+              </div>
             </div>
 
             <div className="bg-gray-50 p-8 rounded-2xl shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
@@ -452,9 +489,11 @@ const App = () => {
                 Desserts
                 <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-12 h-1 bg-orange-500 rounded"></div>
               </h3>
-              {menuData.desserts.map((item, index) => (
-                <MenuItem key={index} item={item} />
-              ))}
+              <div className="flex flex-col gap-4">
+                {menuData.desserts.map((item, index) => (
+                  <MenuItem key={index} item={item} />
+                ))}
+              </div>
             </div>
           </div>
         </section>
